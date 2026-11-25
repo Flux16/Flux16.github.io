@@ -1,31 +1,36 @@
-console.log("Файл app.js успешно подключен!");
 const firebaseConfig = {
-  apiKey: "ТУТ_БУДУТ_ВАШИ_КЛЮЧИ",
-  authDomain: "ваш-проект.firebaseapp.com",
-  projectId: "ваш-проект",
-
-};
-const firebaseConfig = {
-  apiKey: "AIzaSy...",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "123456...",
-  appId: "1:123456:web:abc..."
+  apiKey: "ВАШ_API_KEY",
+  authDomain: "ВАШ_ПРОЕКТ.firebaseapp.com",
+  projectId: "ВАШ_ПРОЕКТ",
+  storageBucket: "ВАШ_ПРОЕКТ.appspot.com",
+  messagingSenderId: "ВАШ_MESSAGING_SENDER_ID",
+  appId: "ВАШ_APP_ID"
 };
 
-const app = firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore(); 
+let db;
+const resultElement = document.getElementById('result');
 
-db.collection("test").add({
-    message: "Привет из GitHub Pages!",
-    timestamp: new Date()
-})
-.then(() => {
-    console.log(" Firebase успешно подключен данные записались в базу.");
-    alert("Успех! Firebase работает.");
-})
-.catch((error) => {
-    console.error(" Ошибка подключения к Firebase:", error);
-    alert("Ошибка! Проверьте консоль (F12).");
+try {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.firestore();
+    resultElement.textContent = "Firebase готов к работе";
+} catch (error) {
+    resultElement.textContent = "Ошибка при инициализации Firebase.";
+}
+
+document.getElementById('test-btn').addEventListener('click', async () => {
+    resultElement.textContent = "Отправка данных в базу";
+
+    try {
+        await db.collection("test").add({
+            message: "Привет из GitHub Pages!",
+            timestamp: new Date()
+        });
+
+        resultElement.textContent = "УСПЕХ!";
+        
+    } catch (error) {
+        resultElement.textContent = "ОШИБКА!";
+        console.log("ошибки для разработчика:", error);
+    }
 });
